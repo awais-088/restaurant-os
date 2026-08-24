@@ -2,24 +2,18 @@
 
 import { useMemo, useState } from "react";
 import MenuCard from "./MenuCard";
-import type { CartItem, MenuCategory, MenuItem } from "@/types/content";
+import type { MenuCategory, MenuItem } from "@/types/content";
 
 type MenuGridProps = {
   categories: MenuCategory[];
   items: MenuItem[];
-  onCartChange: (items: CartItem[]) => void;
+  onAdd: (item: MenuItem) => void;
 };
 
-export default function MenuGrid({
-  categories,
-  items,
-  onCartChange,
-}: MenuGridProps) {
+export default function MenuGrid({ categories, items, onAdd }: MenuGridProps) {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const [search, setSearch] = useState("");
-
-  const [cart, setCart] = useState<CartItem[]>([]);
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -37,29 +31,9 @@ export default function MenuGrid({
     });
   }, [items, activeCategory, search]);
 
-  const addToCart = (item: MenuItem) => {
-    setCart((current) => {
-      const existing = current.find((cartItem) => cartItem.id === item.id);
-
-      const updated = existing
-        ? current.map((cartItem) =>
-            cartItem.id === item.id
-              ? {
-                  ...cartItem,
-                  quantity: cartItem.quantity + 1,
-                }
-              : cartItem,
-          )
-        : [...current, { ...item, quantity: 1 }];
-
-      onCartChange(updated);
-
-      return updated;
-    });
-  };
-
   return (
     <div>
+      {/* Search */}
       <div className="mb-8">
         <div className="relative">
           <input
@@ -72,6 +46,7 @@ export default function MenuGrid({
         </div>
       </div>
 
+      {/* Categories */}
       <div className="mb-10 overflow-x-auto pb-2">
         <div className="flex min-w-max gap-2">
           <button
@@ -103,10 +78,11 @@ export default function MenuGrid({
         </div>
       </div>
 
+      {/* Menu */}
       {filteredItems.length > 0 ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {filteredItems.map((item) => (
-            <MenuCard key={item.id} item={item} onAdd={addToCart} />
+            <MenuCard key={item.id} item={item} onAdd={onAdd} />
           ))}
         </div>
       ) : (
