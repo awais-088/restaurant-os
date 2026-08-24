@@ -6,9 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "seed:menu": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seedMenu.ts",
+    "seed": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seed.ts",
+    "seed:menu-items": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/seedMenuItems.ts",
     "lint": "eslint"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "mongodb": "^7.5.0",
     "mongoose": "^9.9.3",
     "next": "16.3.2",
@@ -23,6 +27,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

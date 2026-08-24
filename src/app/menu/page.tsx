@@ -6,7 +6,6 @@ import MobileActionBar from "@/components/layout/MobileActionBar";
 import MenuExperience from "@/components/menu/MenuExperience";
 
 import { musaRestaurant } from "@/data/restaurant";
-import { menuCategories, menuItems } from "@/data/menu";
 
 export const metadata = {
   title: "Menu | MUSA Cafe & Restaurant",
@@ -32,11 +31,7 @@ export default function MenuPage() {
 
         <section className="py-16 sm:py-24">
           <Container>
-            <MenuExperience
-              categories={menuCategories}
-              items={menuItems}
-              whatsapp={musaRestaurant.whatsapp}
-            />
+            <MenuExperience whatsapp={musaRestaurant.whatsapp} />
           </Container>
         </section>
       </main>
