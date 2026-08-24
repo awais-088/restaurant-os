@@ -1,3 +1,22 @@
+export type MenuCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  order: number;
+};
+
+export type MenuItem = {
+  id: string;
+  categoryId: string;
+  name: string;
+  description?: string;
+  price: number;
+  image?: string;
+  featured?: boolean;
+  available?: boolean;
+};
+
 export type FeaturedDish = {
   id: string;
   name: string;
@@ -29,4 +48,8 @@ export type Review = {
   rating: number;
   text: string;
   source?: string;
+};
+
+export type CartItem = MenuItem & {
+  quantity: number;
 };
