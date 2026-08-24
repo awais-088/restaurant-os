@@ -5,7 +5,8 @@ type ButtonProps = {
   children: ReactNode;
   href?: string;
   onClick?: () => void;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "ghost";
+  className?: string;
 };
 
 export default function Button({
@@ -13,28 +14,33 @@ export default function Button({
   href,
   onClick,
   variant = "primary",
+  className = "",
 }: ButtonProps) {
-  const baseStyles =
-    "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-all duration-300";
+  const base =
+    "inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold tracking-wide transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg";
 
   const variants = {
-    primary: "bg-[#C9A45C] text-[#0B0B0A] hover:bg-[#E0C78A]",
+    primary:
+      "bg-brand-gold text-brand-bg hover:bg-brand-gold-light active:scale-[0.98]",
+
     secondary:
-      "border border-[#C9A45C]/40 text-[#F5F1E8] hover:border-[#C9A45C] hover:text-[#E0C78A]",
+      "border border-brand-gold/40 bg-transparent text-brand-ivory hover:border-brand-gold hover:bg-brand-gold/10 active:scale-[0.98]",
+
+    ghost: "text-brand-gold hover:text-brand-gold-light",
   };
 
-  const className = `${baseStyles} ${variants[variant]}`;
+  const classes = `${base} ${variants[variant]} ${className}`;
 
   if (href) {
     return (
-      <Link href={href} className={className}>
+      <Link href={href} className={classes}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={classes}>
       {children}
     </button>
   );

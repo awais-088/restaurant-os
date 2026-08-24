@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { bodyFont, displayFont } from "./fonts";
 
 export const metadata: Metadata = {
-  title: "RestaurantOS",
-  description: "Premium restaurant websites and digital ordering experiences.",
+  title: "MUSA Cafe & Restaurant",
+  description:
+    "A premium dining destination in Layyah offering Pakistani, BBQ, cafe and continental favorites.",
 };
 
 export default function RootLayout({
@@ -13,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }
