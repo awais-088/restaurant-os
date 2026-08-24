@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RestaurantOS
 
-## Getting Started
+> A premium, fast and reusable restaurant website platform built with Next.js, TypeScript and Tailwind CSS.
 
-First, run the development server:
+RestaurantOS is a reusable digital platform designed for restaurants and cafes. Instead of rebuilding a website for every restaurant, the platform separates reusable application code from restaurant-specific data.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Premium responsive restaurant website
+- Mobile-first design
+- Dynamic restaurant information
+- Dynamic menu management
+- Menu categories and pricing
+- Deals and promotions
+- Gallery management
+- WhatsApp ordering
+- Restaurant-specific contact information
+- SEO-ready architecture
+- Admin dashboard
+- Fast-loading Next.js architecture
+- Reusable multi-restaurant foundation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js
+- TypeScript
+- Tailwind CSS
+- MongoDB
+- Vercel
+- Resend
+- WhatsApp
 
-## Learn More
+## Project Architecture
 
-To learn more about Next.js, take a look at the following resources:
+The platform is designed around a simple principle:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Same application + different restaurant data = new restaurant website**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+MUSA Cafe & Restaurant in Layyah is the first implementation and showcase.
 
-## Deploy on Vercel
+## Development Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🚧 Currently under active development.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Roadmap
+
+- [x] Project foundation
+- [ ] Premium responsive UI
+- [ ] Restaurant website
+- [ ] Menu system
+- [ ] Admin dashboard
+- [ ] WhatsApp ordering
+- [ ] MongoDB integration
+- [ ] SEO optimization
+- [ ] Performance optimization
+- [ ] Production deployment
