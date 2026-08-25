@@ -1,22 +1,18 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, type Model } from "mongoose";
 
-export interface IDeal extends Document {
+export type DealDocument = {
   title: string;
-  description?: string;
-
-  originalPrice?: number;
-  dealPrice: number;
-
+  description: string;
+  price?: number;
+  badge?: string;
   image?: string;
-
   isActive: boolean;
-  startDate?: Date;
-  endDate?: Date;
-
   sortOrder: number;
-}
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-const DealSchema = new Schema<IDeal>(
+const DealSchema = new Schema<DealDocument>(
   {
     title: {
       type: String,
@@ -26,23 +22,25 @@ const DealSchema = new Schema<IDeal>(
 
     description: {
       type: String,
+      required: true,
       trim: true,
     },
 
-    originalPrice: {
+    price: {
       type: Number,
       min: 0,
     },
 
-    dealPrice: {
-      type: Number,
-      required: true,
-      min: 0,
+    badge: {
+      type: String,
+      trim: true,
+      default: "",
     },
 
     image: {
       type: String,
       trim: true,
+      default: "",
     },
 
     isActive: {
@@ -50,13 +48,9 @@ const DealSchema = new Schema<IDeal>(
       default: true,
     },
 
-    startDate: Date,
-
-    endDate: Date,
-
     sortOrder: {
       type: Number,
-      default: 0,
+      default: 1,
     },
   },
   {
@@ -64,7 +58,7 @@ const DealSchema = new Schema<IDeal>(
   },
 );
 
-const Deal: Model<IDeal> =
-  mongoose.models.Deal || mongoose.model<IDeal>("Deal", DealSchema);
+const Deal: Model<DealDocument> =
+  mongoose.models.Deal || mongoose.model<DealDocument>("Deal", DealSchema);
 
 export default Deal;

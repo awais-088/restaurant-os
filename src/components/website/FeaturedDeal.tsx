@@ -34,6 +34,11 @@ export default function FeaturedDeal({ deal, whatsapp }: FeaturedDealProps) {
                 <p className="mt-6 max-w-lg text-sm leading-7 text-brand-muted sm:text-base">
                   {deal.description}
                 </p>
+                {deal.price !== undefined && (
+                  <p className="mt-5 font-display text-2xl text-brand-gold">
+                    Rs. {deal.price.toLocaleString()}
+                  </p>
+                )}
 
                 <div className="mt-8">
                   <Button href={orderLink}>Ask About This Deal</Button>

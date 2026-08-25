@@ -1,0 +1,252 @@
+"use client";
+
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { useRouter } from "next/navigation";
+
+type Category = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+type AddMenuItemFormProps = {
+  categories: Category[];
+};
+
+export default function AddMenuItemForm({ categories }: AddMenuItemFormProps) {
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [categoryId, setCategoryId] = useState(
+    categories.length > 0 ? categories[0].id : "",
+  );
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [isFeatured, setIsFeatured] = useState(false);
+
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setError("");
+
+    if (!name.trim()) {
+      setError("Please enter a menu item name.");
+      return;
+    }
+
+    if (!categoryId) {
+      setError("Please select a category.");
+      return;
+    }
+
+    if (!price || Number(price) < 0) {
+      setError("Please enter a valid price.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const response = await fetch("/api/admin/menu-items", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          categoryId,
+          price: Number(price),
+          description,
+          isAvailable,
+          isFeatured,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to create menu item.");
+      }
+
+      router.push("/admin/menu");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+
+      setError(
+        error instanceof Error ? error.message : "Failed to create menu item.",
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-white/10 bg-brand-surface p-6 sm:p-8"
+    >
+      {/* Error */}
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
+          <p className="text-sm text-red-300">{error}</p>
+        </div>
+      )}
+
+      {/* Name */}
+      <div>
+        <label
+          htmlFor="name"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Item Name
+        </label>
+
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="e.g. Chicken Karahi"
+          className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-brand-bg px-4 text-sm text-brand-ivory outline-none placeholder:text-brand-muted focus:border-brand-gold/50"
+        />
+      </div>
+
+      {/* Category */}
+      <div className="mt-6">
+        <label
+          htmlFor="category"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Category
+        </label>
+
+        <select
+          id="category"
+          value={categoryId}
+          onChange={(event) => setCategoryId(event.target.value)}
+          className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-brand-bg px-4 text-sm text-brand-ivory outline-none focus:border-brand-gold/50"
+        >
+          {categories.length === 0 ? (
+            <option value="">No categories available</option>
+          ) : (
+            categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))
+          )}
+        </select>
+      </div>
+
+      {/* Price */}
+      <div className="mt-6">
+        <label
+          htmlFor="price"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Price
+        </label>
+
+        <div className="relative mt-2">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-brand-muted">
+            Rs.
+          </span>
+
+          <input
+            id="price"
+            type="number"
+            min="0"
+            step="1"
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
+            placeholder="1800"
+            className="h-12 w-full rounded-xl border border-white/10 bg-brand-bg pl-12 pr-4 text-sm text-brand-ivory outline-none placeholder:text-brand-muted focus:border-brand-gold/50"
+          />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="mt-6">
+        <label
+          htmlFor="description"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Describe the dish..."
+          rows={5}
+          className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-brand-bg px-4 py-3 text-sm leading-6 text-brand-ivory outline-none placeholder:text-brand-muted focus:border-brand-gold/50"
+        />
+      </div>
+
+      {/* Options */}
+      <div className="mt-8 space-y-4">
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            checked={isAvailable}
+            onChange={(event) => setIsAvailable(event.target.checked)}
+            className="h-4 w-4 accent-brand-gold"
+          />
+
+          <span>
+            <span className="block text-sm text-brand-ivory">Available</span>
+
+            <span className="block text-xs text-brand-muted">
+              Customers can order this item.
+            </span>
+          </span>
+        </label>
+
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            checked={isFeatured}
+            onChange={(event) => setIsFeatured(event.target.checked)}
+            className="h-4 w-4 accent-brand-gold"
+          />
+
+          <span>
+            <span className="block text-sm text-brand-ivory">Featured</span>
+
+            <span className="block text-xs text-brand-muted">
+              Mark this dish as a signature item.
+            </span>
+          </span>
+        </label>
+      </div>
+
+      {/* Buttons */}
+      <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button
+          type="button"
+          onClick={() => router.push("/admin/menu")}
+          disabled={saving}
+          className="rounded-full border border-white/10 px-6 py-3 text-xs font-bold uppercase tracking-wider text-brand-muted transition hover:border-white/20 hover:text-brand-ivory disabled:opacity-50"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          disabled={saving || categories.length === 0}
+          className="rounded-full bg-brand-gold px-6 py-3 text-xs font-bold uppercase tracking-wider text-brand-bg transition hover:bg-brand-gold-light disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {saving ? "Saving..." : "Save Item"}
+        </button>
+      </div>
+    </form>
+  );
+}

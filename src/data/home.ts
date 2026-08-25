@@ -1,9 +1,4 @@
-import type {
-  FeaturedDish,
-  GalleryItem,
-  RestaurantDeal,
-  Review,
-} from "@/types/content";
+import type { FeaturedDish, GalleryItem, Review } from "@/types/content";
 
 export const featuredDishes: FeaturedDish[] = [
   {
@@ -30,14 +25,6 @@ export const featuredDishes: FeaturedDish[] = [
     featured: true,
   },
 ];
-
-export const featuredDeal: RestaurantDeal = {
-  id: "deal-1",
-  title: "Gather Around the Table",
-  description:
-    "Bring your family and friends together for a memorable dining experience.",
-  badge: "MUSA SPECIAL",
-};
 
 export const galleryItems: GalleryItem[] = [
   {

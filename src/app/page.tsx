@@ -12,15 +12,37 @@ import ReviewsPreview from "@/components/website/ReviewsPreview";
 import Location from "@/components/website/Location";
 
 import { musaRestaurant } from "@/data/restaurant";
-import {
-  featuredDishes,
-  featuredDeal,
-  galleryItems,
-  reviews,
-} from "@/data/home";
+import { featuredDishes, galleryItems, reviews } from "@/data/home";
 
-export default function Home() {
+import { connectDB } from "@/lib/mongodb";
+import Deal from "@/models/Deal";
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
   const restaurant = musaRestaurant;
+
+  await connectDB();
+
+  const deal = await Deal.findOne({
+    isActive: true,
+  })
+    .sort({
+      sortOrder: 1,
+      createdAt: -1,
+    })
+    .lean();
+
+  const featuredDeal = deal
+    ? {
+        id: deal._id.toString(),
+        title: deal.title,
+        description: deal.description,
+        price: deal.price,
+        badge: deal.badge || undefined,
+        image: deal.image || undefined,
+      }
+    : null;
 
   return (
     <>
@@ -33,7 +55,9 @@ export default function Home() {
 
         <FeaturedDishes dishes={featuredDishes} />
 
-        <FeaturedDeal deal={featuredDeal} whatsapp={restaurant.whatsapp} />
+        {featuredDeal && (
+          <FeaturedDeal deal={featuredDeal} whatsapp={restaurant.whatsapp} />
+        )}
 
         <Story restaurant={restaurant} />
 

@@ -30,11 +30,12 @@ export type RestaurantDeal = {
   id: string;
   title: string;
   description: string;
-  price?: string;
+  price?: number;
   image?: string;
   badge?: string;
+  isActive?: boolean;
+  sortOrder?: number;
 };
-
 export type GalleryItem = {
   id: string;
   title: string;

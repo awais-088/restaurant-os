@@ -46,6 +46,13 @@ export default function Footer({ restaurant }: FooterProps) {
               <Link href="/contact" className="hover:text-brand-ivory">
                 Contact
               </Link>
+
+              <Link
+                href="/admin/login"
+                className="mt-3 w-fit text-xs uppercase tracking-[0.15em] text-brand-muted transition hover:text-brand-gold"
+              >
+                Admin Login
+              </Link>
             </div>
           </div>
 

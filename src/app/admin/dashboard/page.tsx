@@ -1,10 +1,12 @@
 import AdminLayout from "@/components/admin/AdminLayout";
-
+import { requireAdmin } from "@/lib/auth";
 export const metadata = {
   title: "Admin Dashboard | MUSA Cafe & Restaurant",
 };
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  await requireAdmin();
+
   return (
     <AdminLayout>
       <section>
