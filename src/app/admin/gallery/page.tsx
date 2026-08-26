@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { connectDB } from "@/lib/mongodb";
 import Gallery from "@/models/Gallery";
-
+import DeleteGalleryButton from "@/components/admin/DeleteGalleryButton";
 import AdminLayout from "@/components/admin/AdminLayout";
 
 export const dynamic = "force-dynamic";
@@ -111,12 +111,7 @@ export default async function AdminGalleryPage() {
                       Edit
                     </Link>
 
-                    <Link
-                      href={`/admin/gallery/${item._id.toString()}?delete=true`}
-                      className="rounded-full border border-red-500/30 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-red-400 transition hover:bg-red-500/10"
-                    >
-                      Delete
-                    </Link>
+                    <DeleteGalleryButton id={item._id.toString()} />
                   </div>
                 </div>
               </article>
