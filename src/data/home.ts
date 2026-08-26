@@ -1,4 +1,4 @@
-import type { FeaturedDish, GalleryItem, Review } from "@/types/content";
+import type { FeaturedDish, Review } from "@/types/content";
 
 export const featuredDishes: FeaturedDish[] = [
   {
@@ -9,6 +9,7 @@ export const featuredDishes: FeaturedDish[] = [
       "A rich and comforting Pakistani favorite, prepared for the table.",
     featured: true,
   },
+
   {
     id: "dish-2",
     name: "BBQ Platter",
@@ -16,6 +17,7 @@ export const featuredDishes: FeaturedDish[] = [
     description: "A generous selection of grilled favorites made for sharing.",
     featured: true,
   },
+
   {
     id: "dish-3",
     name: "Chicken Sulemani Karahi",
@@ -23,29 +25,6 @@ export const featuredDishes: FeaturedDish[] = [
     description:
       "Bold flavors and traditional character in one of our featured dishes.",
     featured: true,
-  },
-];
-
-export const galleryItems: GalleryItem[] = [
-  {
-    id: "gallery-1",
-    title: "The Dining Experience",
-    category: "Interior",
-  },
-  {
-    id: "gallery-2",
-    title: "From Our Kitchen",
-    category: "Food",
-  },
-  {
-    id: "gallery-3",
-    title: "Made for Sharing",
-    category: "Dining",
-  },
-  {
-    id: "gallery-4",
-    title: "Moments at MUSA",
-    category: "Experience",
   },
 ];
 
@@ -57,6 +36,7 @@ export const reviews: Review[] = [
     text: "A welcoming place with a good variety of food and a pleasant dining atmosphere.",
     source: "Google",
   },
+
   {
     id: "review-2",
     name: "Google Guest",
@@ -64,6 +44,7 @@ export const reviews: Review[] = [
     text: "The food selection and overall atmosphere make it a good place for family dining.",
     source: "Google",
   },
+
   {
     id: "review-3",
     name: "Google Guest",

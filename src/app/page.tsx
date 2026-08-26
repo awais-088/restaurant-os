@@ -12,7 +12,6 @@ import ReviewsPreview from "@/components/website/ReviewsPreview";
 import Location from "@/components/website/Location";
 
 import { musaRestaurant } from "@/data/restaurant";
-
 import { featuredDishes, reviews } from "@/data/home";
 
 import { connectDB } from "@/lib/mongodb";
