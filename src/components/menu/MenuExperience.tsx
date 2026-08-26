@@ -26,6 +26,7 @@ type MenuApiItem = {
   slug: string;
   description?: string;
   price: number;
+  image?: string;
   isAvailable: boolean;
   isFeatured: boolean;
   sortOrder: number;
@@ -97,6 +98,7 @@ export default function MenuExperience({ whatsapp }: MenuExperienceProps) {
           name: item.name,
           description: item.description,
           price: item.price,
+          image: item.image,
           featured: item.isFeatured,
           available: item.isAvailable,
         }));

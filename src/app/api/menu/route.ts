@@ -4,6 +4,8 @@ import { connectDB } from "@/lib/mongodb";
 import MenuCategory from "@/models/MenuCategory";
 import MenuItem from "@/models/MenuItem";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     await connectDB();
