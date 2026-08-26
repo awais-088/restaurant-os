@@ -16,7 +16,6 @@ function createSlug(value: string) {
 export async function GET() {
   try {
     await requireAdmin();
-
     await connectDB();
 
     const items = await MenuItem.find()
@@ -46,17 +45,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     await requireAdmin();
-
     await connectDB();
 
     const body = await request.json();
 
-    const { name, categoryId, price, description, isAvailable, isFeatured } =
-      body;
-
-    // -----------------------------
-    // Basic validation
-    // -----------------------------
+    const {
+      name,
+      categoryId,
+      price,
+      description,
+      image,
+      isAvailable,
+      isFeatured,
+    } = body;
 
     if (!name || !categoryId || price === undefined) {
       return NextResponse.json(
@@ -96,10 +97,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // -----------------------------
-    // Check category
-    // -----------------------------
-
     const category = await MenuCategory.findById(categoryId);
 
     if (!category) {
@@ -113,10 +110,6 @@ export async function POST(request: Request) {
         },
       );
     }
-
-    // -----------------------------
-    // Create slug
-    // -----------------------------
 
     const slug = createSlug(name);
 
@@ -132,10 +125,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // -----------------------------
-    // Prevent duplicate slug
-    // -----------------------------
-
     const existingItem = await MenuItem.findOne({ slug });
 
     if (existingItem) {
@@ -150,10 +139,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // -----------------------------
-    // Determine sort order
-    // -----------------------------
-
     const lastItem = await MenuItem.findOne()
       .sort({ sortOrder: -1 })
       .select("sortOrder")
@@ -161,16 +146,13 @@ export async function POST(request: Request) {
 
     const sortOrder = lastItem?.sortOrder ? lastItem.sortOrder + 1 : 1;
 
-    // -----------------------------
-    // Create item
-    // -----------------------------
-
     const item = await MenuItem.create({
       name: name.trim(),
       slug,
       category: category._id,
       description: description?.trim() || "",
       price: numericPrice,
+      image: typeof image === "string" ? image.trim() : "",
       isAvailable: isAvailable !== false,
       isFeatured: isFeatured === true,
       sortOrder,

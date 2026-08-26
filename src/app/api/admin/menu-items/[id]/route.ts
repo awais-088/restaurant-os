@@ -22,7 +22,6 @@ type RouteContext = {
 export async function PATCH(request: Request, context: RouteContext) {
   try {
     await requireAdmin();
-
     await connectDB();
 
     const { id } = await context.params;
@@ -41,12 +40,15 @@ export async function PATCH(request: Request, context: RouteContext) {
 
     const body = await request.json();
 
-    const { name, categoryId, price, description, isAvailable, isFeatured } =
-      body;
-
-    // -----------------------------
-    // Validation
-    // -----------------------------
+    const {
+      name,
+      categoryId,
+      price,
+      description,
+      image,
+      isAvailable,
+      isFeatured,
+    } = body;
 
     if (!name || !categoryId || price === undefined) {
       return NextResponse.json(
@@ -86,10 +88,6 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
-    // -----------------------------
-    // Check existing item
-    // -----------------------------
-
     const existingItem = await MenuItem.findById(id);
 
     if (!existingItem) {
@@ -103,10 +101,6 @@ export async function PATCH(request: Request, context: RouteContext) {
         },
       );
     }
-
-    // -----------------------------
-    // Check category
-    // -----------------------------
 
     const category = await MenuCategory.findById(categoryId);
 
@@ -122,10 +116,6 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
-    // -----------------------------
-    // Create new slug
-    // -----------------------------
-
     const slug = createSlug(name);
 
     if (!slug) {
@@ -139,10 +129,6 @@ export async function PATCH(request: Request, context: RouteContext) {
         },
       );
     }
-
-    // -----------------------------
-    // Check duplicate slug
-    // -----------------------------
 
     const duplicate = await MenuItem.findOne({
       slug,
@@ -163,23 +149,19 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
-    // -----------------------------
-    // Update
-    // -----------------------------
-
     existingItem.name = name.trim();
     existingItem.slug = slug;
     existingItem.category = category._id;
     existingItem.price = numericPrice;
     existingItem.description = description?.trim() || "";
+
+    // Save image URL
+    existingItem.image = typeof image === "string" ? image.trim() : "";
+
     existingItem.isAvailable = isAvailable !== false;
     existingItem.isFeatured = isFeatured === true;
 
     await existingItem.save();
-
-    // -----------------------------
-    // Return populated item
-    // -----------------------------
 
     const updatedItem = await MenuItem.findById(existingItem._id)
       .populate("category", "name slug")
@@ -204,10 +186,10 @@ export async function PATCH(request: Request, context: RouteContext) {
     );
   }
 }
+
 export async function DELETE(request: Request, context: RouteContext) {
   try {
     await requireAdmin();
-
     await connectDB();
 
     const { id } = await context.params;

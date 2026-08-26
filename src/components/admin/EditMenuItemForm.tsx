@@ -16,6 +16,7 @@ type MenuItemData = {
   categoryId: string;
   description: string;
   price: number;
+  image?: string;
   isAvailable: boolean;
   isFeatured: boolean;
 };
@@ -35,6 +36,7 @@ export default function EditMenuItemForm({
   const [categoryId, setCategoryId] = useState(item.categoryId);
   const [price, setPrice] = useState(String(item.price));
   const [description, setDescription] = useState(item.description);
+  const [image, setImage] = useState(item.image || "");
 
   const [isAvailable, setIsAvailable] = useState(item.isAvailable);
   const [isFeatured, setIsFeatured] = useState(item.isFeatured);
@@ -75,6 +77,7 @@ export default function EditMenuItemForm({
           categoryId,
           price: Number(price),
           description,
+          image,
           isAvailable,
           isFeatured,
         }),
@@ -104,6 +107,7 @@ export default function EditMenuItemForm({
       onSubmit={handleSubmit}
       className="rounded-2xl border border-white/10 bg-brand-surface p-6 sm:p-8"
     >
+      {/* Error */}
       {error && (
         <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
           <p className="text-sm text-red-300">{error}</p>
@@ -176,6 +180,46 @@ export default function EditMenuItemForm({
           />
         </div>
       </div>
+
+      {/* Image URL */}
+      <div className="mt-6">
+        <label
+          htmlFor="image"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Image URL
+        </label>
+
+        <input
+          id="image"
+          type="url"
+          value={image}
+          onChange={(event) => setImage(event.target.value)}
+          placeholder="https://example.com/chicken-karahi.jpg"
+          className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-brand-bg px-4 text-sm text-brand-ivory outline-none placeholder:text-brand-muted focus:border-brand-gold/50"
+        />
+
+        <p className="mt-2 text-xs leading-5 text-brand-muted">
+          Paste a publicly accessible image URL. You can replace it whenever the
+          restaurant provides new photography.
+        </p>
+      </div>
+
+      {/* Image Preview */}
+      {image.trim() && (
+        <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-brand-bg">
+          <div className="aspect-[16/9]">
+            <img
+              src={image}
+              alt={`${name || "Menu item"} preview`}
+              className="h-full w-full object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       <div className="mt-6">

@@ -23,6 +23,7 @@ export default function AddMenuItemForm({ categories }: AddMenuItemFormProps) {
   );
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
 
   const [isAvailable, setIsAvailable] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
@@ -63,6 +64,7 @@ export default function AddMenuItemForm({ categories }: AddMenuItemFormProps) {
           categoryId,
           price: Number(price),
           description,
+          image,
           isAvailable,
           isFeatured,
         }),
@@ -171,6 +173,46 @@ export default function AddMenuItemForm({ categories }: AddMenuItemFormProps) {
           />
         </div>
       </div>
+
+      {/* Image URL */}
+      <div className="mt-6">
+        <label
+          htmlFor="image"
+          className="text-xs font-bold uppercase tracking-wider text-brand-muted"
+        >
+          Image URL
+        </label>
+
+        <input
+          id="image"
+          type="url"
+          value={image}
+          onChange={(event) => setImage(event.target.value)}
+          placeholder="https://example.com/chicken-karahi.jpg"
+          className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-brand-bg px-4 text-sm text-brand-ivory outline-none placeholder:text-brand-muted focus:border-brand-gold/50"
+        />
+
+        <p className="mt-2 text-xs leading-5 text-brand-muted">
+          Optional. Paste a publicly accessible image URL. You can add the
+          actual MUSA photos later.
+        </p>
+      </div>
+
+      {/* Image Preview */}
+      {image.trim() && (
+        <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-brand-bg">
+          <div className="aspect-[16/9]">
+            <img
+              src={image}
+              alt="Menu item preview"
+              className="h-full w-full object-cover"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Description */}
       <div className="mt-6">
