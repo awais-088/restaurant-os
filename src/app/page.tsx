@@ -12,10 +12,12 @@ import ReviewsPreview from "@/components/website/ReviewsPreview";
 import Location from "@/components/website/Location";
 
 import { musaRestaurant } from "@/data/restaurant";
-import { featuredDishes, galleryItems, reviews } from "@/data/home";
+
+import { featuredDishes, reviews } from "@/data/home";
 
 import { connectDB } from "@/lib/mongodb";
 import Deal from "@/models/Deal";
+import Gallery from "@/models/Gallery";
 
 export const dynamic = "force-dynamic";
 
@@ -24,14 +26,26 @@ export default async function Home() {
 
   await connectDB();
 
-  const deal = await Deal.findOne({
-    isActive: true,
-  })
-    .sort({
-      sortOrder: 1,
-      createdAt: -1,
+  const [deal, gallery] = await Promise.all([
+    Deal.findOne({
+      isActive: true,
     })
-    .lean();
+      .sort({
+        sortOrder: 1,
+        createdAt: -1,
+      })
+      .lean(),
+
+    Gallery.find({
+      isActive: true,
+    })
+      .sort({
+        sortOrder: 1,
+        createdAt: -1,
+      })
+      .limit(4)
+      .lean(),
+  ]);
 
   const featuredDeal = deal
     ? {
@@ -39,10 +53,19 @@ export default async function Home() {
         title: deal.title,
         description: deal.description,
         price: deal.price,
-        badge: deal.badge || undefined,
-        image: deal.image || undefined,
+        badge: deal.badge,
+        image: deal.image,
+        isActive: deal.isActive,
+        sortOrder: deal.sortOrder,
       }
     : null;
+
+  const galleryItems = gallery.map((item) => ({
+    id: item._id.toString(),
+    title: item.title,
+    category: item.category,
+    image: item.image,
+  }));
 
   return (
     <>

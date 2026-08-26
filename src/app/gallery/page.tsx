@@ -1,10 +1,16 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MobileActionBar from "@/components/layout/MobileActionBar";
+
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
+
 import { musaRestaurant } from "@/data/restaurant";
-import { galleryItems } from "@/data/home";
+
+import { connectDB } from "@/lib/mongodb";
+import Gallery from "@/models/Gallery";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Gallery | MUSA Cafe & Restaurant",
@@ -12,7 +18,18 @@ export const metadata = {
     "Explore the food, atmosphere and dining experience at MUSA Cafe & Restaurant.",
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  await connectDB();
+
+  const gallery = await Gallery.find({
+    isActive: true,
+  })
+    .sort({
+      sortOrder: 1,
+      createdAt: -1,
+    })
+    .lean();
+
   return (
     <>
       <Navbar restaurant={musaRestaurant} />
@@ -31,17 +48,31 @@ export default function GalleryPage() {
 
         <section className="py-16 sm:py-24">
           <Container>
-            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-              {galleryItems.map((item, index) => (
-                <article
-                  key={item.id}
-                  className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-brand-surface ${
-                    index === 1 ? "lg:translate-y-12" : ""
-                  }`}
-                >
-                  <div className="aspect-[3/4] bg-[radial-gradient(circle_at_center,rgba(201,164,92,0.12),transparent_55%)]">
-                    <div className="flex h-full items-end p-5 sm:p-7">
-                      <div>
+            {gallery.length === 0 ? (
+              <div className="rounded-2xl border border-white/10 bg-brand-surface p-10 text-center">
+                <p className="text-sm text-brand-muted">
+                  Our gallery is being prepared. Check back soon.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+                {gallery.map((item, index) => (
+                  <article
+                    key={item._id.toString()}
+                    className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-brand-surface ${
+                      index === 1 ? "lg:translate-y-12" : ""
+                    }`}
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      />
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
                         <span className="text-[8px] uppercase tracking-[0.25em] text-brand-gold">
                           {item.category}
                         </span>
@@ -49,12 +80,18 @@ export default function GalleryPage() {
                         <h2 className="mt-2 font-display text-xl text-brand-ivory sm:text-3xl">
                           {item.title}
                         </h2>
+
+                        {item.description && (
+                          <p className="mt-2 text-xs leading-5 text-white/70">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </Container>
         </section>
       </main>

@@ -21,6 +21,7 @@ export default function FeaturedDeal({ deal, whatsapp }: FeaturedDealProps) {
       <Container className="relative">
         <div className="overflow-hidden rounded-3xl border border-brand-gold/20 bg-brand-bg">
           <div className="grid lg:grid-cols-2">
+            {/* Content */}
             <div className="flex min-h-[420px] items-center p-8 sm:p-12 lg:p-16">
               <div className="max-w-xl">
                 <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-brand-gold">
@@ -34,6 +35,7 @@ export default function FeaturedDeal({ deal, whatsapp }: FeaturedDealProps) {
                 <p className="mt-6 max-w-lg text-sm leading-7 text-brand-muted sm:text-base">
                   {deal.description}
                 </p>
+
                 {deal.price !== undefined && (
                   <p className="mt-5 font-display text-2xl text-brand-gold">
                     Rs. {deal.price.toLocaleString()}
@@ -46,18 +48,32 @@ export default function FeaturedDeal({ deal, whatsapp }: FeaturedDealProps) {
               </div>
             </div>
 
-            <div className="relative min-h-[320px] bg-gradient-to-br from-brand-gold/20 via-brand-surface to-brand-bg lg:min-h-full">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="font-display text-[8rem] leading-none text-brand-gold/20">
-                    M
-                  </span>
+            {/* Image */}
+            <div className="relative min-h-[320px] overflow-hidden bg-brand-surface lg:min-h-full">
+              {deal.image ? (
+                <>
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
+                    style={{
+                      backgroundImage: `url("${deal.image}")`,
+                    }}
+                  />
 
-                  <p className="mt-2 text-[9px] uppercase tracking-[0.35em] text-brand-muted/50">
-                    Featured Experience
-                  </p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/50 via-transparent to-brand-bg/10" />
+                </>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-brand-gold/20 via-brand-surface to-brand-bg">
+                  <div className="text-center">
+                    <span className="font-display text-[8rem] leading-none text-brand-gold/20">
+                      M
+                    </span>
+
+                    <p className="mt-2 text-[9px] uppercase tracking-[0.35em] text-brand-muted/50">
+                      Featured Experience
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
